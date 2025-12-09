@@ -14,11 +14,9 @@ module panel_memory(
     reg [23:0] MEM [0:16383]; 
 
     initial begin
-        // Asegúrate de que este archivo exista (lo crearemos con Python)
         $readmemh("multi_image.hex", MEM); 
     end
-
-    // Truco de dirección:
+    
     // Ponemos los 2 bits del selector AL PRINCIPIO de la dirección.
     // Sel=0 -> Direcciones 0     a 4095
     // Sel=1 -> Direcciones 4096  a 8191 ...
