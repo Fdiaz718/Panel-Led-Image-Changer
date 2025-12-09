@@ -5,7 +5,7 @@ Esto proyecto es extensión de la [versión de 8bpp](https://github.com/Fdiaz718
 Los modulos que no se mencionen aqui es porque no sufrieron cambios para este nuevo funcionamiento.
 
 ## Limitaciones
-Las imagenes a cargar deben ser pasadas antes por un programa en python que convierte las 4 imagenes a mostrar en una cadena más larga de caracteres, esencialmente haciendo 4 imagenes una detras de otra. El codigo de python para generar estas imagenes esta aqui.
+Las imagenes a cargar deben ser pasadas antes por un programa en python que convierte las 4 imagenes a mostrar en una cadena más larga de caracteres, esencialmente haciendo 4 imagenes una detras de otra. El codigo de python para generar estas imagenes esta [aqui](https://github.com/Fdiaz718/Panel-Led-Image-Changer/blob/main/mega_img.v).
 
 ## Explicación modulos
 ### top.v
