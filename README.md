@@ -26,6 +26,9 @@ Utiliza la señal `image_sel` como los bits más significativos (MSB) de la dire
 
 ## Videos de funcionamiento
 Se va a utilizar youtube para tener videos del proyecto en funcionamiento. Yo (Felipe Diaz Gordillo) **UNICO** autor del proyecto no tengo un portatil para poder llevar a la U y mostrar todo alli mismo, opto por poner videos de proyecto funcionado para asegurarme de que se vea el trabajo que se hizo por mi parte.
-*[Video cambiador de imagenes](https://youtu.be/zJjXblrA7eI)
-*[Video 8bpp a 5bpp](https://youtu.be/O6P-v_ejYoA)
-*[Video 5bpp a 1 bpp](https://youtu.be/zRmT128f3-A)
+
+[Video cambiador de imagenes](https://youtu.be/zJjXblrA7eI)
+
+[Video 8bpp a 5bpp](https://youtu.be/O6P-v_ejYoA)
+
+[Video 5bpp a 1 bpp](https://youtu.be/zRmT128f3-A)
