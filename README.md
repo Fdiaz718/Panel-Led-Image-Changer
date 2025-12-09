@@ -5,7 +5,7 @@ Esto proyecto es extensión de la [versión de 8bpp](https://github.com/Fdiaz718
 Los modulos que no se mencionen aqui es porque no sufrieron cambios para este nuevo funcionamiento.
 
 ## Limitaciones
-Las imagenes a cargar deben ser pasadas antes por un programa en python que convierte las 4 imagenes a mostrar en una cadena más larga de caracteres, esencialmente haciendo 4 imagenes una detras de otra. 
+Las imagenes a cargar deben ser pasadas antes por un programa en python que convierte las 4 imagenes a mostrar en una cadena más larga de caracteres, esencialmente haciendo 4 imagenes una detras de otra. El codigo de python para generar estas imagenes esta aqui.
 
 ## Explicación modulos
 ### top.v
@@ -22,4 +22,3 @@ Utiliza la señal `image_sel` como los bits más significativos (MSB) de la dire
     * `sel=00`: Lee direcciones 0x0000 - 0x0FFF (Imagen 1)
     * `sel=01`: Lee direcciones 0x1000 - 0x1FFF (Imagen 2)
     * ...etc.
-* **Carga:** Se inicializa mediante el archivo `multi_image.hex` generado externamente.
