@@ -1,31 +1,52 @@
-module panel_memory(
+module panel_memory (
     input  wire        clk,
-    input  wire [11:0] addr_top,    // 0..4095
-    input  wire [11:0] addr_bottom, // 0..4095
-    
-    // NUEVO: Selector (0, 1, 2, 3)
-    input  wire [1:0]  image_sel,   
-    
+    input  wire [11:0] addr_top,
+    input  wire [11:0] addr_bottom,
     output reg  [23:0] pix_top,
     output reg  [23:0] pix_bottom
 );
 
-    // Memoria expandida: 16,384 espacios (4 imágenes de 4096 píxeles)
-    reg [23:0] MEM [0:16383]; 
+    reg [23:0] BACKGROUND_MEM [4095];
+    reg [23:0] SPRITE_MEM     [4095];
+    reg [23:0] TEXT_MEM       [4095];
+
+    reg [23:0] background_top;
+    reg [23:0] background_bottom;
+    reg [23:0] sprite_top;
+    reg [23:0] sprite_bottom;
+    reg [23:0] text_top;
+    reg [23:0] text_bottom;
 
     initial begin
-        $readmemh("multi_image.hex", MEM); 
+        $readmemh("./images/waitingScreen.hex", BACKGROUND_MEM);
+        $readmemh("./images/Truck.hex", SPRITE_MEM);
+        $readmemh("./images/text.hex", TEXT_MEM);
     end
-    
-    // Ponemos los 2 bits del selector AL PRINCIPIO de la dirección.
-    // Sel=0 -> Direcciones 0     a 4095
-    // Sel=1 -> Direcciones 4096  a 8191 ...
-    wire [13:0] final_addr_top    = {image_sel, addr_top};
-    wire [13:0] final_addr_bottom = {image_sel, addr_bottom};
 
     always @(posedge clk) begin
-        pix_top    <= MEM[final_addr_top];
-        pix_bottom <= MEM[final_addr_bottom];
+        background_top    <= BACKGROUND_MEM[addr_top];
+        background_bottom <= BACKGROUND_MEM[addr_bottom];
+        sprite_top        <= SPRITE_MEM[addr_top];
+        sprite_bottom     <= SPRITE_MEM[addr_bottom];
+        text_top          <= TEXT_MEM[addr_top];
+        text_bottom       <= TEXT_MEM[addr_bottom];
+    end
+
+    // Priority conditional
+    always @* begin
+        if (text_top != 24'h000000)
+            pix_top = text_top;
+        else if (sprite_top != 24'h000000)
+            pix_top = sprite_top;
+        else
+            pix_top = background_top;
+
+        if (text_bottom != 24'h000000)
+            pix_bottom = text_bottom;
+        else if (sprite_bottom != 24'h000000)
+            pix_bottom = sprite_bottom;
+        else
+            pix_bottom = background_bottom;
     end
 
 endmodule
