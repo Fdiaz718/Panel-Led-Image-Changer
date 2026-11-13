@@ -1,4 +1,4 @@
-module scan_counters(
+module scan_counter(
     input  wire clk,
     input  wire rst,
 

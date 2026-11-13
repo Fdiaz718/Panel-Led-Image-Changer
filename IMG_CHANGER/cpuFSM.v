@@ -1,4 +1,4 @@
-module cpuISM (
+module cpuFSM (
     input clk,
     input wire rst_n,
     output r0,
@@ -61,10 +61,10 @@ module cpuISM (
         end
       end
       2: begin
+        sel_hub75 <= 0;
+        wstrb <= 0;
       end
-      default: begin
-        state <= 2;
-      end
+      default: state <= 2;
     endcase
   end
 
