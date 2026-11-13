@@ -60,7 +60,7 @@ sim: $(BUILD_DIR)/hub75_simulation.vcd
 
 # 4. Target "make view": Abre GTKWave automáticamente
 view: sim
-	$(GTKWAVE) $(BUILD_DIR)/hub75_simulation.vcd
+	$(GTKWAVE) $(BUILD_DIR)/$(TB).vcd
 
 # Limpiar
 clean:
