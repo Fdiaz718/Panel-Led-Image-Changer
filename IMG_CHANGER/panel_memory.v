@@ -64,5 +64,3 @@ module panel_memory #(
       pix_bottom = background_bottom;
   end
 endmodule
-
-
