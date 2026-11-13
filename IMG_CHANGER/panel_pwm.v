@@ -21,3 +21,4 @@ module panel_pwm(
     assign b1 = (bottom_blue > pwm_level);
 
 endmodule
+

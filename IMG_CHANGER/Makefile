@@ -2,9 +2,9 @@
 # VARIABLES DEL PROYECTO
 # ==========================================
 PROJ = hub75_controller
-TOP  = top
+TOP  = cpuISM
 # Lista de todos tus archivos fuente
-SRCS = top.v panel_memory.v panel_pwm.v scan_counter.v delay_unit.v
+SRCS = cpuISM.v hub75.v panel_memory.v panel_pwm.v scan_counter.v delay_unit.v
 LPF  = constraints.lpf
 TB   = tb
 TB_SRC = SIM/$(TB).v

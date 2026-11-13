@@ -28,7 +28,7 @@ module scan_counter(
             end
 
             // Advance the image row only after scanning the final column.
-            if (col == 63) begin
+            if (col == 1) begin
                 scan_row <= scan_row + 1;
                 if (scan_row == 31) begin
                     scan_row <= 0;
@@ -38,9 +38,7 @@ module scan_counter(
         end
     end
 
-    // There is not need of 1'b0. It's basically 0.
-    // assign row_top    = {1'b0, scan_row};
-    assign row_top    = scan_row;
+    assign row_top    = {1'b0, scan_row};
     assign row_bottom = {1'b1, scan_row};
 
 endmodule

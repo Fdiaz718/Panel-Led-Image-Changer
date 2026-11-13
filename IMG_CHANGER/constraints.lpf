@@ -29,8 +29,6 @@ LOCATE COMP "clk_out" SITE "M3";   # Pin 13 - CLK
 LOCATE COMP "latch" SITE "N1";     # Pin 14 - LAT
 LOCATE COMP "oe" SITE "M4";        # Pin 15 - OE
 
-LOCATE COMP "rst" SITE "C4";   # Reset
-
 # ============================================
 # CONFIGURACIÓN I/O
 # ============================================
@@ -53,5 +51,5 @@ IOBUF PORT "oe" IO_TYPE=LVCMOS33 DRIVE=8;
 
 IOBUF PORT "rst" IO_TYPE=LVCMOS33 DRIVE=8;
 
-LOCATE COMP "btn" SITE "R7";   # Reset
-IOBUF PORT "rst" IO_TYPE=LVCMOS33 DRIVE=8;
+LOCATE COMP "rst_n" SITE "R7";   # Reset
+IOBUF PORT "rst_n" IO_TYPE=LVCMOS33 DRIVE=8;
