@@ -1,31 +1,66 @@
-module panel_memory(
+module panel_memory #(
+    parameter COLOR_BITS = 4
+) (
     input  wire        clk,
-    input  wire [11:0] addr_top,    // 0..4095
-    input  wire [11:0] addr_bottom, // 0..4095
-    
-    // NUEVO: Selector (0, 1, 2, 3)
-    input  wire [1:0]  image_sel,   
-    
-    output reg  [23:0] pix_top,
-    output reg  [23:0] pix_bottom
+    input  wire [11:0] addr_top,
+    input  wire [11:0] addr_bottom,
+
+    output reg  [(3*COLOR_BITS)-1:0] pix_top,
+    output reg  [(3*COLOR_BITS)-1:0] pix_bottom,
+
+    // CPU connection
+    input wire wr_clk,
+    input wire wr_en,
+    input wire [1:0] wr_sel, // Layer selector
+    input wire [11:0] wr_addr, // Position on memory.
+    input wire [(3*COLOR_BITS)-1:0] wr_data
 );
 
-    // Memoria expandida: 16,384 espacios (4 imágenes de 4096 píxeles)
-    reg [23:0] MEM [0:16383]; 
+  reg [(3*COLOR_BITS)-1:0] BACKGROUND_MEM    [4095];
+  reg [(3*COLOR_BITS)-1:0] SPRITE_MEM        [4095];
+  reg [(3*COLOR_BITS)-1:0] TEXT_MEM          [4095];
 
-    initial begin
-        $readmemh("multi_image.hex", MEM); 
+  reg [(3*COLOR_BITS)-1:0] background_top, background_bottom;
+  reg [(3*COLOR_BITS)-1:0] sprite_top, sprite_bottom;
+  reg [(3*COLOR_BITS)-1:0] text_top, text_bottom;
+
+
+  // Set pixels on memory
+  always @(posedge clk) begin
+    if (wr_en) begin
+      case (wr_sel)
+        2'b00:   BACKGROUND_MEM[wr_addr] <= wr_data;
+        2'b01:   SPRITE_MEM[wr_addr] <= wr_data;
+        2'b10:   TEXT_MEM[wr_addr] <= wr_data;
+        default: ;
+      endcase
     end
-    
-    // Ponemos los 2 bits del selector AL PRINCIPIO de la dirección.
-    // Sel=0 -> Direcciones 0     a 4095
-    // Sel=1 -> Direcciones 4096  a 8191 ...
-    wire [13:0] final_addr_top    = {image_sel, addr_top};
-    wire [13:0] final_addr_bottom = {image_sel, addr_bottom};
+  end
 
-    always @(posedge clk) begin
-        pix_top    <= MEM[final_addr_top];
-        pix_bottom <= MEM[final_addr_bottom];
-    end
+  // Get pixels from memory
+  always @(posedge clk) begin
+    background_top    <= BACKGROUND_MEM[addr_top];
+    background_bottom <= BACKGROUND_MEM[addr_bottom];
+    sprite_top        <= SPRITE_MEM[addr_top];
+    sprite_bottom     <= SPRITE_MEM[addr_bottom];
+    text_top          <= TEXT_MEM[addr_top];
+    text_bottom       <= TEXT_MEM[addr_bottom];
+  end
 
+  // Priority conditions
+  always @* begin
+    if (text_top != {(3*COLOR_BITS){1'b0}})
+      pix_top = text_top;
+    else if (sprite_top != {(3*COLOR_BITS){1'b0}})
+      pix_top = sprite_top;
+    else
+      pix_top = background_top;
+
+    if (text_bottom != {(3*COLOR_BITS){1'b0}})
+      pix_bottom = text_bottom;
+    else if (sprite_bottom != {(3*COLOR_BITS){1'b0}})
+      pix_bottom = sprite_bottom;
+    else
+      pix_bottom = background_bottom;
+  end
 endmodule

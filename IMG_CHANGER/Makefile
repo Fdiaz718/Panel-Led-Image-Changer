@@ -2,11 +2,12 @@
 # VARIABLES DEL PROYECTO
 # ==========================================
 PROJ = hub75_controller
-TOP  = top
+TOP  = cpuFSM
 # Lista de todos tus archivos fuente
-SRCS = top.v panel_pwm.v panel_memory.v scan_counter.v delay_unit.v debounce.v
+SRCS = cpuFSM.v hub75.v panel_memory.v panel_pwm.v scan_counter.v delay_unit.v
 LPF  = constraints.lpf
 TB   = tb
+TB_SRC = SIM/$(TB).v
 
 
 # Configuración FPGA
@@ -47,8 +48,8 @@ program: $(BUILD_DIR)/$(PROJ).bit
 # SIMULACIÓN
 
 # 1. Compilar simulación (.vvp)
-$(BUILD_DIR)/$(TB).vvp: $(TB).v $(SRCS) | $(BUILD_DIR)
-	$(IVERILOG) -o $@ -s $(TB) $(TB).v $(SRCS)
+$(BUILD_DIR)/$(TB).vvp: $(TB_SRC) $(SRCS) | $(BUILD_DIR)
+	$(IVERILOG) -o $@ -s $(TB) $(TB_SRC) $(SRCS)
 
 # 2. Ejecutar simulación (.vcd)
 $(BUILD_DIR)/hub75_simulation.vcd: $(BUILD_DIR)/$(TB).vvp
@@ -59,7 +60,7 @@ sim: $(BUILD_DIR)/hub75_simulation.vcd
 
 # 4. Target "make view": Abre GTKWave automáticamente
 view: sim
-	$(GTKWAVE) $(BUILD_DIR)/hub75_simulation.vcd
+	$(GTKWAVE) $(BUILD_DIR)/$(TB).vcd
 
 # Limpiar
 clean:
