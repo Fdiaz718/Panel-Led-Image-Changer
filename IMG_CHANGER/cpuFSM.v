@@ -16,7 +16,6 @@ module cpuFSM (
   reg sel_hub75 = 0;
   reg wstrb = 0;
   reg [31:0] wdata = 0;
-  reg [19:0] word_addr = 0;
 
   hub75 uut (
       .clk(clk),
@@ -24,7 +23,6 @@ module cpuFSM (
       .sel_hub75(sel_hub75),
       .wstrb(wstrb),
       .wdata(wdata),
-      .word_addr(word_addr),
       .r0(r0),
       .g0(g0),
       .b0(b0),
@@ -38,31 +36,38 @@ module cpuFSM (
   );
 
   // Simple state Machine
-  reg [ 1:0] state = 0;
-  reg [19:0] pixel_counter = 0;
+  reg [1:0] state = 0;
+  reg [1:0] layer = 2'd1;
+  reg [5:0] x = 0;
+  reg [5:0] y = 0;
 
   always @(posedge clk) begin
     case (state)
       0: begin
         sel_hub75 <= 1;
         wstrb <= 1;
-        word_addr <= pixel_counter;
-        wdata <= 32'h00FF0000;
+        wdata <= {layer, y, x, 18'hF00};
         state <= 1;
       end
       1: begin
         wstrb <= 0;
         sel_hub75 <= 0;
-        if (pixel_counter < 4096) begin
-          pixel_counter <= pixel_counter + 1;
-          state <= 0;
+        if (x == 6'd63) begin
+          x <= 0;
+          if (y == 6'd63) state <= 2;
+          else begin
+            y <= y + 1;
+            state <= 0;
+          end
         end else begin
-          state <= 2;
+          x <= x + 1;
+          state <= 0;
         end
       end
       2: begin
         sel_hub75 <= 0;
         wstrb <= 0;
+        wdata <= 31'b0;
       end
       default: state <= 2;
     endcase

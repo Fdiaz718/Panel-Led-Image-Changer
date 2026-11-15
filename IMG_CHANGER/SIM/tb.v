@@ -40,7 +40,7 @@ module tb;
         #100;
         rst_n = 1'b1;
 
-        #600000;
+        #174710;
 
         $display("Simulación finalizada correctamente.");
         $finish;

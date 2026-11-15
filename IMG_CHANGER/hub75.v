@@ -5,10 +5,9 @@ module hub75 #(
     input wire rst,
 
     // CPU Controls
-    input wire sel_hub75, // CS
+    input wire sel_hub75,
     input wire wstrb,
     input wire [31:0] wdata,
-    input wire [19:0] word_addr,
 
     // Output
     output wire r0,
@@ -23,10 +22,10 @@ module hub75 #(
     output wire oe
 );
 
-  wire wr_en = sel_hub75 && wstrb;
-  wire [1:0] wr_sel = word_addr[14:13];
-  wire [(3*COLOR_BITS)-1:0] wr_data = wdata[(3*COLOR_BITS)-1:0];
-  wire [11:0] wr_addr = {word_addr[12:9], word_addr[7:0]};
+  wire wr_en = sel_hub75 && wstrb;  // Selection hub75
+  wire [1:0] wr_sel = wdata[31:30];  // Layer Selection 0 = GB, 1 SPRITE, 2 TEXT
+  wire [11:0] wr_addr = {wdata[29:18]};  // {x, y}
+  wire [(3*COLOR_BITS)-1:0] wr_data = wdata[(3*COLOR_BITS)-1:0];  // Color
 
   wire [5:0] col;
   wire [4:0] scan_row;
@@ -65,9 +64,9 @@ module hub75 #(
 
       .wr_clk (clk),
       .wr_en  (wr_en),
-      .wr_sel (wr_sel),  // Layer select
-      .wr_addr(wr_addr), // Takes just the 12:0 ignorando el 8 del world_addr.
-      .wr_data(wr_data)  // color data takes just the last 12 bits if rgb444 is applied.
+      .wr_sel (wr_sel),
+      .wr_addr(wr_addr),
+      .wr_data(wr_data)
   );
 
 `ifdef PWM
